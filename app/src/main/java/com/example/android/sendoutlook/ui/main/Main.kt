@@ -68,8 +68,7 @@ fun AppContainer(
         ModalDrawerSheet {
             Spacer(modifier = Modifier.height(12.dp))
             items.forEach { item ->
-                NavigationDrawerItem(
-                    icon = { Icon(item.icon, contentDescription = "") },
+                NavigationDrawerItem(icon = { Icon(item.icon, contentDescription = "") },
                     label = { Text(text = item.title) },
                     selected = item == selectedItem.value,
                     onClick = {
@@ -113,7 +112,14 @@ fun AppContainer(
                 }
             })
         }) { paddingValues ->
-            MyAppNavHost(modifier = modifier.padding(paddingValues), navController = navController)
+            MyAppNavHost(modifier = modifier.padding(paddingValues),
+                navController = navController,
+                goToOutBox = {
+                    coroutineScope.launch {
+                        navController.navigate(NavigationRoutes.OUTBOX_ROUTE)
+                        selectedItem.value = items[1]
+                    }
+                })
         }
     }
 }

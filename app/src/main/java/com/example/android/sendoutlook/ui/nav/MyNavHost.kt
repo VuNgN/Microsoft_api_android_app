@@ -19,16 +19,17 @@ import com.example.android.sendoutlook.util.NavigationRoutes
 fun MyAppNavHost(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
-    startDestination: String = NavigationRoutes.INBOX_ROUTE
+    startDestination: String = NavigationRoutes.INBOX_ROUTE,
+    goToOutBox: () -> Unit = {}
 ) {
     NavHost(
-        modifier = modifier,
-        navController = navController,
-        startDestination = startDestination
+        modifier = modifier, navController = navController, startDestination = startDestination
     ) {
         composable(NavigationRoutes.INBOX_ROUTE) {
             val vm: InboxVM = viewModel<InboxVMImpl>()
-            Inbox(vm = vm)
+            Inbox(
+                vm = vm, goToOutBox = goToOutBox
+            )
         }
         composable(NavigationRoutes.OUTBOX_ROUTE) {
             val vm: OutboxVM = viewModel<OutboxVMImpl>()
