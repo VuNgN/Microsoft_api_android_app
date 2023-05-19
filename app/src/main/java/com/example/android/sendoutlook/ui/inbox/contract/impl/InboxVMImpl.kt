@@ -13,7 +13,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class InboxVMImpl @Inject constructor() : ViewModel(), InboxVM {
+class InboxVMImpl @Inject constructor(private val graphHelper: GraphHelper) : ViewModel(), InboxVM {
     private val _messages: MutableStateFlow<List<Message>> = MutableStateFlow(listOf())
     private val _loading: MutableStateFlow<Boolean> = MutableStateFlow(false)
     override val messages: MutableStateFlow<List<Message>>
@@ -25,7 +25,7 @@ class InboxVMImpl @Inject constructor() : ViewModel(), InboxVM {
 
     fun getMail() {
         _loading.value = true
-        GraphHelper.getInstance().email.thenAccept { mails ->
+        graphHelper.emails.thenAccept { mails ->
             Log.d(TAG, "getMail: ${Gson().toJson(mails.currentPage)}")
             mails.currentPage.forEach { mail ->
                 Log.d(TAG, "Mail title: ${mail.subject}")

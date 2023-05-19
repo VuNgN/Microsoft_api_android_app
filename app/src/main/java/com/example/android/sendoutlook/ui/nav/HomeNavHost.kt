@@ -2,7 +2,7 @@ package com.example.android.sendoutlook.ui.nav
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -16,23 +16,24 @@ import com.example.android.sendoutlook.ui.outbox.contract.impl.OutboxVMImpl
 import com.example.android.sendoutlook.util.NavigationRoutes
 
 @Composable
-fun MyAppNavHost(
+fun HomeNavHost(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
     startDestination: String = NavigationRoutes.INBOX_ROUTE,
-    goToOutBox: () -> Unit = {}
+    goToOutBox: () -> Unit = {},
+    goToMailContent: (String) -> Unit = {}
 ) {
     NavHost(
         modifier = modifier, navController = navController, startDestination = startDestination
     ) {
         composable(NavigationRoutes.INBOX_ROUTE) {
-            val vm: InboxVM = viewModel<InboxVMImpl>()
+            val vm: InboxVM = hiltViewModel<InboxVMImpl>()
             Inbox(
-                vm = vm, goToOutBox = goToOutBox
+                vm = vm, goToOutBox = goToOutBox, goToMailContent = goToMailContent
             )
         }
         composable(NavigationRoutes.OUTBOX_ROUTE) {
-            val vm: OutboxVM = viewModel<OutboxVMImpl>()
+            val vm: OutboxVM = hiltViewModel<OutboxVMImpl>()
             Outbox(vm = vm)
         }
     }

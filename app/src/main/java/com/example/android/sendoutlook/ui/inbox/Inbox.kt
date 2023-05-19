@@ -33,7 +33,12 @@ import com.example.android.sendoutlook.ui.inbox.contract.InboxVM
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Inbox(modifier: Modifier = Modifier, vm: InboxVM, goToOutBox: () -> Unit) {
+fun Inbox(
+    modifier: Modifier = Modifier,
+    vm: InboxVM,
+    goToOutBox: () -> Unit,
+    goToMailContent: (String) -> Unit
+) {
     val messages by vm.messages.collectAsState()
     val loading by vm.loading.collectAsState()
     LaunchedEffect(key1 = true) {
@@ -64,7 +69,7 @@ fun Inbox(modifier: Modifier = Modifier, vm: InboxVM, goToOutBox: () -> Unit) {
                         Box(
                             modifier = Modifier
                                 .fillMaxSize()
-                                .clickable { },
+                                .clickable { goToMailContent(message.id.toString()) },
                         ) {
                             Column(
                                 modifier = Modifier

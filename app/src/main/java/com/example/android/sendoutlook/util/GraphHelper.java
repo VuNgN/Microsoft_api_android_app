@@ -88,8 +88,12 @@ public class GraphHelper {
         return mClient.me().sendMail(UserSendMailParameterSet.newBuilder().withMessage(message).withSaveToSentItems(saveToSentItems).build()).buildRequest().postAsync();
     }
 
-    public CompletableFuture<MessageCollectionPage> getEmail() {
-        return mClient.me().messages().buildRequest().getAsync();
+    public CompletableFuture<MessageCollectionPage> getEmails() {
+        return mClient.me().messages().buildRequest().select("sender,subject,isRead,receivedDateTime,bodyPreview,id").getAsync();
+    }
+
+    public CompletableFuture<Message> getMessage(String id) {
+        return mClient.me().messages(id).buildRequest().getAsync();
     }
 
     public CompletableFuture<List<Event>> getCalendarView(ZonedDateTime viewStart, ZonedDateTime viewEnd, String timeZone) {

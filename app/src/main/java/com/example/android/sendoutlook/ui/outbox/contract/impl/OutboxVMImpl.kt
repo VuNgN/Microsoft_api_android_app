@@ -11,7 +11,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import javax.inject.Inject
 
 @HiltViewModel
-class OutboxVMImpl @Inject constructor() : ViewModel(), OutboxVM {
+class OutboxVMImpl @Inject constructor(private val graphHelper: GraphHelper) : ViewModel(),
+    OutboxVM {
     private var _sendingStatus: MutableStateFlow<SendingStatus> =
         MutableStateFlow(SendingStatus.FREE)
     override val sendingStatus: MutableStateFlow<SendingStatus>
@@ -21,7 +22,7 @@ class OutboxVMImpl @Inject constructor() : ViewModel(), OutboxVM {
         mailTo: String, cc: String, subject: String, bodyType: BodyType, content: String
     ) {
         _sendingStatus.value = SendingStatus.SENDING
-        GraphHelper.getInstance().sendEmail(mailTo, cc, subject, bodyType, content).thenAccept {
+        graphHelper.sendEmail(mailTo, cc, subject, bodyType, content).thenAccept {
             _sendingStatus.value = SendingStatus.SENT
         }.exceptionally { e ->
             _sendingStatus.value = SendingStatus.ERROR
